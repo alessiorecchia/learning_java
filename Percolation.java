@@ -2,19 +2,19 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 import java.util.Arrays;
-
-import javax.swing.plaf.basic.BasicTreeUI.TreeCancelEditingAction;
+import edu.princeton.cs.algs4.QuickFindUF;
+import edu.princeton.cs.algs4.QuickUnionUF;
 
 public class Percolation {
 
     private int[][] grid;
-    private WeightedQuickUnionUF tree;
+    private QuickFindUF tree;
     private int numOpenSistes = 0;
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
         
         grid = new int[n][n];
-        tree = new WeightedQuickUnionUF(n * n);
+        tree = new QuickFindUF(n * n);
 
         for (int i=0; i < n; i++) {
             for (int j=0; j < n; j++) {
@@ -179,36 +179,36 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args) {
-        Percolation perc = new Percolation(5);
+        // Percolation perc = new Percolation(5);
 
-        System.out.println(perc.tree.find(4));
+        // System.out.println(perc.tree.find(4));
 
-        perc.open(0, 4);
-        System.out.println(perc.tree.find(4));
-        perc.open(3, 2);
-        perc.open(1, 3);
-        System.out.println(perc.tree.find(4));
-        perc.open(1, 4);
-        System.out.println(perc.tree.find(4));
-        perc.open(2, 4);
-        System.out.println(perc.tree.find(4));
-        perc.open(3, 4);
-        System.out.println(perc.tree.find(4));
-        perc.open(4, 4);
-        System.out.println(perc.tree.find(4));
+        // perc.open(0, 4);
+        // System.out.println(perc.tree.find(4));
+        // perc.open(3, 2);
+        // perc.open(1, 3);
+        // System.out.println(perc.tree.find(4));
+        // perc.open(1, 4);
+        // System.out.println(perc.tree.find(4));
+        // perc.open(2, 4);
+        // System.out.println(perc.tree.find(4));
+        // perc.open(3, 4);
+        // System.out.println(perc.tree.find(4));
+        // perc.open(4, 4);
+        // System.out.println(perc.tree.find(4));
 
-        System.out.println(perc.numberOfOpenSites());
-        System.out.println("Is (0, 4) open? " + perc.isOpen(0, 4));
-        System.out.println(perc.tree.find(4));
-        System.out.println("Is (0, 4) full? " + perc.isFull(0, 4));
-        System.out.println("Is (3, 2) full? " + perc.isFull(3, 2));
-        System.out.println("Is (0, 2) full? " + perc.isFull(0, 2));
-        System.out.println("Is (1, 4) full? " + perc.isFull(0, 2));
-        System.out.println("Is (4, 4) full? " + perc.isFull(4, 4));
-        System.out.println("Is (3, 4) full? " + perc.isFull(3, 4));
-        System.out.println("Is (2, 4) full? " + perc.isFull(2, 4));
-        System.out.println("Percolates? " + perc.percolates());
-        System.out.println(perc.tree.find(4));
+        // System.out.println(perc.numberOfOpenSites());
+        // System.out.println("Is (0, 4) open? " + perc.isOpen(0, 4));
+        // System.out.println(perc.tree.find(4));
+        // System.out.println("Is (0, 4) full? " + perc.isFull(0, 4));
+        // System.out.println("Is (3, 2) full? " + perc.isFull(3, 2));
+        // System.out.println("Is (0, 2) full? " + perc.isFull(0, 2));
+        // System.out.println("Is (1, 4) full? " + perc.isFull(0, 2));
+        // System.out.println("Is (4, 4) full? " + perc.isFull(4, 4));
+        // System.out.println("Is (3, 4) full? " + perc.isFull(3, 4));
+        // System.out.println("Is (2, 4) full? " + perc.isFull(2, 4));
+        // System.out.println("Percolates? " + perc.percolates());
+        // System.out.println(perc.tree.find(4));
     }
     
 }
