@@ -1,20 +1,22 @@
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+// import edu.princeton.cs.algs4.StdRandom;
+// import edu.princeton.cs.algs4.StdStats;
+// import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 import java.util.Arrays;
-import edu.princeton.cs.algs4.QuickFindUF;
-import edu.princeton.cs.algs4.QuickUnionUF;
+// import edu.princeton.cs.algs4.QuickFindUF;
+// import edu.princeton.cs.algs4.QuickUnionUF;
 
 public class Percolation {
 
     private int[][] grid;
-    private QuickFindUF tree;
+    private QuickFind tree;
     private int numOpenSistes = 0;
+    private boolean percolates = false;
+
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
         
         grid = new int[n][n];
-        tree = new QuickFindUF(n * n);
+        tree = new QuickFind(n * n);
 
         for (int i=0; i < n; i++) {
             for (int j=0; j < n; j++) {
@@ -26,123 +28,42 @@ public class Percolation {
 
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
-        if (grid[row][col] == 0) {
+        int n = this.grid.length;
+
+        if (!this.isOpen(row, col)) {
             grid[row][col] = 1;
             numOpenSistes++;
         }
-        int n = this.grid.length;
 
-        // cells not on the edges/corners
-        if (0 < row && row < n - 1 && 0 < col && col < n - 1) {
-            if (this.isOpen(row - 1, col)) {                        // upper row
+        if ((row - 1) >= 0) {
+            if (this.isOpen(row - 1, col)) {
                 tree.union(n * row + col, n * (row - 1) + col);
             }
-            else if (this.isOpen(row + 1, col)) {                   // lower row
-                tree.union(n * row + col, n * (row + 1) + col);
-            }
-            else if (this.isOpen(row, col + 1)) {                   // rightmost col
-                tree.union(n * row + col, col + 1 + n * row);
-            }
-            else if (this.isOpen(row, col - 1)) {                   // leftmost col
-                tree.union(n * row + col, col -1 + n * row);
+        }
+        if ((row + 1) < n) {
+            if (this.isOpen(row + 1, col)) {
+                tree.union(n * (row + 1) + col, n * row + col);
             }
         }
-        // upper edge (without corners)
-        else if (row == 0 && 0 < col && col < n - 1) {
-            if (this.isOpen(row + 1, col)) {                        // lower row
-                tree.union(n * row + col, n * (row + 1) + col);
-            }
-            else if (this.isOpen(row, col + 1)) {                   // rightmost col
-                tree.union(n * row + col, (col + 1) + n * row);
-            }
-            else if (this.isOpen(row, col - 1)) {                   // leftmost col
-                tree.union(n * row + col, col - 1 + n * row);
-            }
-        }
-        // bottom edge (without corners)
-        else if (row == n - 1 && 0 < col && col < n - 1) {
-            if (this.isOpen(row - 1, col)) {                        // upper row
-                tree.union(n * row + col, n * (row - 1) + col);
-            }
-            else if (this.isOpen(row, col + 1)) {                   // rightmost col
-                tree.union(n * row + col, (col + 1) + n * row);
-            }
-            else if (this.isOpen(row, col - 1)) {                   // leftmost col
-                tree.union(n * row + col, col - 1 + n * row);
-            }
-        }
-        // left edge (without corners)
-        else if (0 < row && row < n - 1 && col == 0) {
-            if (this.isOpen(row + 1, col)) {                        // lower row
-                tree.union(n * row + col, n * (row + 1) + col);
-            }
-            else if (this.isOpen(row - 1, col)) {                   // upper row
-                tree.union(n * row + col, n * (row - 1) + col);
-            }
-            else if (this.isOpen(row, col + 1)) {                   // rightmost col
-                tree.union(n * row + col, col + 1 + n * row);
-            }
-        }
-        // right edge (without corners)
-        else if (0 < row && row < n - 1 && col == n - 1) {
-            if (this.isOpen(row + 1, col)) {                        // lower row
-                tree.union(n * row + col, n * (row + 1) + col);
-            }
-            else if (this.isOpen(row - 1, col)) {                   // upper row
-                tree.union(n * row + col, n * (row - 1) + col);
-            }
-            else if (this.isOpen(row, col - 1)) {                   // leftmost col
-                tree.union(n * row + col, col - 1 + n * row);
-            }
-        }
-        // corners
-        // top-left
-        else if (row == 0 && col == 0) {
-            if (this.isOpen(row, col + 1)) {                        // rightmost col
-                tree.union(n * row + col, n * row + col + 1);
-            }
-            else if (this.isOpen(row + 1, col)) {                   // lower row
-                tree.union(n * row + col, n * (row + 1) + col);
-            }
-        }
-        // top-right
-        else if (row == 0 && col == n - 1) {
-            if (this.isOpen(row, col - 1)) {                        // leftmost col
+        if((col - 1) >= 0) {
+            if (this.isOpen(row, col - 1)) {
                 tree.union(n * row + col, n * row + col - 1);
             }
-            else if (this.isOpen(row + 1, col)) {                   // lower row
-                tree.union(n * row + col, n * (row + 1) + col);
+        }
+        if ((col + 1) < n) {
+            if (this.isOpen(row, col + 1)) {
+                tree.union(col + 1 + n * row, n * row + col);
             }
         }
-        // bottom-left
-        else if (row == n - 1 && col == 0) {
-            if (this.isOpen(row, col + 1)) {                        // rightmost col
-                tree.union(n * row + col, n * row + col + 1);
-            }
-            else if (this.isOpen(row - 1, col)) {                   // upper row
-                tree.union(n * row + col, n * (row - 1) + col);
-            }
-        }
-        // bottom right
-        else if (row == n - 1 && col == n - 1) {
-            if (this.isOpen(row, col - 1)) {                        // leftmost col
-                tree.union(n * row + col, n * row + col - 1);
-            }
-            else if (this.isOpen(row - 1, col)) {                   // upper row
-                tree.union(n * row + col, n * (row - 1) + col);
-            }
-        }
+        // System.out.println("Num open sites: " + numOpenSistes);
         
     }
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
-        boolean isOpen;
+        boolean isOpen = false;
         if (this.grid[row][col] == 1) {
             isOpen = true;
-        }
-        else {
-            isOpen = false;
         }
         return isOpen;
     }
@@ -164,38 +85,61 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        boolean percolates = false;
+        // boolean percolates = false;
         int n = this.grid.length;
         int i = 0;
-        System.out.println(i);
+        // System.out.println(i);
         do {
             if (this.isFull(n - 1, i)) {
                 percolates = true;
             }
+            // this.isFull(n - 1, i);
             i++;
-        } while (percolates == false && i < n);
+        } while (!percolates && i < n);
         return percolates;
     }
 
+    public void print() {
+        System.out.println(Arrays.deepToString(grid));
+    }
+
+    
+
     // test client (optional)
     public static void main(String[] args) {
-        // Percolation perc = new Percolation(5);
+        int n = Integer.parseInt(args[0]);
+        int iter = 0;
+        Percolation perc = new Percolation(n);
+        double fraction = 0;
+
+        while (!perc.percolates()) {
+            int rand = (int) (Math.random() * n * n );
+
+            int row = rand / n;
+            int col = rand % n;
+
+            // System.out.println("Row: " + row + " | Col: " + col);
+            
+            perc.open(row, col);
+            // fraction = perc.numOpenSistes / (double) (n * n);
+            // System.out.println(fraction);
+            perc.print();
+            perc.tree.print();
+            iter++;
+        }
+        System.out.println("Percolates after " + iter + " iterations");
+        // System.out.println("Percolates");
 
         // System.out.println(perc.tree.find(4));
 
-        // perc.open(0, 4);
+        // perc.open(0, 2);
         // System.out.println(perc.tree.find(4));
-        // perc.open(3, 2);
-        // perc.open(1, 3);
-        // System.out.println(perc.tree.find(4));
-        // perc.open(1, 4);
-        // System.out.println(perc.tree.find(4));
-        // perc.open(2, 4);
-        // System.out.println(perc.tree.find(4));
-        // perc.open(3, 4);
-        // System.out.println(perc.tree.find(4));
-        // perc.open(4, 4);
-        // System.out.println(perc.tree.find(4));
+        
+        // perc.open(1, 2);
+        // perc.open(1, 1);
+        // perc.open(1, 0);
+        
+        // perc.open(2, 0);
 
         // System.out.println(perc.numberOfOpenSites());
         // System.out.println("Is (0, 4) open? " + perc.isOpen(0, 4));
@@ -209,6 +153,7 @@ public class Percolation {
         // System.out.println("Is (2, 4) full? " + perc.isFull(2, 4));
         // System.out.println("Percolates? " + perc.percolates());
         // System.out.println(perc.tree.find(4));
+        perc.print();
     }
     
 }
