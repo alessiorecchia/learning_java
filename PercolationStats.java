@@ -47,7 +47,7 @@ public class PercolationStats {
     public double stddev() {
         double sigma2 = 0;
         for (int i = 0; i < fractions.length; i++) {
-            sigma2 += fractions[i] - this.mean();
+            sigma2 += Math.pow(fractions[i] - this.mean(), 2);
         }
         sigma2 = sigma2/(fractions.length - 1);
         return sigma2;
