@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class QuickFind {
 
-    int[] id;
+    private int[] id;
 
     public QuickFind(int n) {
         id = new int[n];
@@ -26,12 +26,12 @@ public class QuickFind {
             id[i] = j;
         }
     }
+    
+    public boolean connected(int p, int q) {
+        return find(p) == find(q);
+    }
 
-    // public int find(int p) {
-    //     return id[p];
-    // }
-
-    public void print() {
+    private void print() {
         System.out.println(Arrays.toString(id));
     }
 

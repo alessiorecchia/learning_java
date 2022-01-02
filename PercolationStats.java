@@ -1,72 +1,62 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import java.util.Arrays;
 
 public class PercolationStats {
 
-    double fraction;
-    double[] fractions;
+    private final double[] fractions;
+    private final int T;
+    private static final double CONFIDENCE_95 = 1.96;
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
+
+        if (n <= 0 || trials <= 0) throw new IllegalArgumentException();
+
         Percolation g; 
         int row, col;
+        double fraction;
+        T = trials;
         fractions = new double[trials];
         for (int i = 0; i < trials; i++) {
-            System.out.println("Trial no. " + (i + 1));
             g = new Percolation(n);
             int iter = 0;
             fraction = 0;
             while (!g.percolates()) {
-                fraction = g.numberOfOpenSites()/(double)(n * n);
-                col = randint(0, n);
-                row = randint(0, n);
+                col = randint(1, n + 1);
+                row = randint(1, n + 1);
                 g.open(row, col);
-                iter++;
-                // System.out.print(fraction + " ");
+                iter = iter + 1;
             }
-            System.out.println("Percolates after " + iter + " iterations");
-            System.out.println("Fraction: " + fraction);
-            // System.out.println(Arrays.toString(fractions));
+            fraction = g.numberOfOpenSites()/(double) (n * n);
             fractions[i] = fraction;
         }
     }
 
     // sample mean of percolation threshold
     public double mean() {
-        double m = 0;
-        for (int i = 0; i < fractions.length; i++) {
-            m += fractions[i];
-        }
-        m = m/fractions.length;
-        return m;
+        return StdStats.mean(fractions);
     }
 
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        double sigma2 = 0;
-        for (int i = 0; i < fractions.length; i++) {
-            sigma2 += Math.pow(fractions[i] - this.mean(), 2);
-        }
-        sigma2 = sigma2/(fractions.length - 1);
-        return sigma2;
+        return StdStats.stddev(fractions);
     }
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        double cLo = 0;
+        double cLo = this.mean() - CONFIDENCE_95 * Math.sqrt(this.stddev()/Math.sqrt((double) this.T));
         return cLo;
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        double cHi = 0;
+        double cHi = this.mean() + CONFIDENCE_95 * Math.sqrt(this.stddev()/Math.sqrt((double) this.T));
         return cHi;
     }
 
     private int randint(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
+        return (int) ((StdRandom.uniform() * (max - min)) + min);
     }
 
    // test client (see below)
@@ -74,8 +64,9 @@ public class PercolationStats {
        int n = Integer.parseInt(args[0]);
        int trials = Integer.parseInt(args[1]);
        PercolationStats tries = new PercolationStats(n, trials);
-       System.out.println("Mean: " + tries.mean());
-       System.out.println("Std dev: " + tries.stddev());
+       System.out.println("mean                     = " + tries.mean());
+       System.out.println("stddev                   = " + tries.stddev());
+       System.out.println("95% confidence interval  = [" + tries.confidenceLo() + ", " + tries.confidenceHi() + "]");
 
    }
 
