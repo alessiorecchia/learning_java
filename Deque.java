@@ -37,12 +37,11 @@ public class Deque<Item> implements Iterable<Item> {
         Node<Item> oldFirst = first;
         first = new Node<Item>();
         first.item = item;
-        first.prev = null;
+        // first.prev = null;
+        first.next = oldFirst;
+        // oldFirst.prev = first;
         if (isEmpty()) last = first;
-        else {
-            first.next = oldFirst;
-            oldFirst.prev = first;
-        }
+        else oldFirst.prev = first;
         n++;
     }
 
@@ -52,12 +51,10 @@ public class Deque<Item> implements Iterable<Item> {
         Node<Item> oldLast = last;
         last = new Node<Item>();
         last.item = item;
-        last.next = null;
+        // last.next = null;
+        last.prev = oldLast;
         if (isEmpty()) first = last;
-        else {
-            oldLast.next = last;
-            last.prev = oldLast;
-        }
+        else oldLast.next = last;
         n++;
     }
 
@@ -74,10 +71,14 @@ public class Deque<Item> implements Iterable<Item> {
     public Item removeLast() {
         if (isEmpty()) throw new NoSuchElementException();
         Item item = last.item;
-        last = last.prev;
-        last.next = null;
+        if (size() > 1) {
+            last = last.prev;
+            last.next = null;
+        }
+        if (size() == 1) last = first;
+        // System.out.println(last.item);
         n--;
-        if (isEmpty()) first = null;
+        if (isEmpty()) last = first = null;
         return item;
     }
 
@@ -114,6 +115,34 @@ public class Deque<Item> implements Iterable<Item> {
     public static void main(String[] args) {
         Deque<Integer> deq = new Deque<Integer>();
 
+        // System.out.println(deq.isEmpty());
+        deq.addFirst(2);
+        deq.addFirst(3);
+        deq.addLast(4);
+        // deq.removeLast();
+        // deq.removeLast();
+        // deq.removeFirst();
+        // deq.removeFirst();
+        
+        // System.out.println(deq.first.item);
+        // System.out.println(deq.last.item);
+        // System.out.println(deq.last.next);
+        // System.out.println(deq.first.next);
+        // System.out.println(deq.last.prev.item);
+        // System.out.println(deq.first.next.item);
+
+        System.out.println("Deq size: " + deq.size());
+        // System.out.println(deq.first.item);
+        // System.out.println(deq.last.item);
+        System.out.println("");
+        System.out.println("######## Deq elements ########");
+        for (int i : deq) {
+            System.out.println(i); 
+        }
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+
         deq.addLast(3);
         deq.addFirst(1);
         deq.addLast(4);
@@ -140,43 +169,43 @@ public class Deque<Item> implements Iterable<Item> {
             System.out.println(i); 
         }
 
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        deq.removeLast();
-        System.out.println("Deq size: " + deq.size());
-        System.out.println("");
-        System.out.println("######## Deq elements ########");
-        for (int i : deq) {
-            System.out.println(i); 
-        }
-        deq.removeLast();
-        System.out.println("Deq size: " + deq.size());
-        System.out.println("");
-        System.out.println("######## Deq elements ########");
-        for (int i : deq) {
-            System.out.println(i); 
-        }
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        deq.removeLast();
-        System.out.println("Deq size: " + deq.size());
-        System.out.println("");
-        System.out.println("######## Deq elements ########");
-        for (int i : deq) {
-            System.out.println(i); 
-        }
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        deq.removeFirst();
-        System.out.println("Deq size: " + deq.size());
-        System.out.println("");
-        System.out.println("######## Deq elements ########");
-        for (int i : deq) {
-            System.out.println(i); 
-        }
+        // System.out.println("");
+        // System.out.println("");
+        // System.out.println("");
+        // deq.removeLast();
+        // System.out.println("Deq size: " + deq.size());
+        // System.out.println("");
+        // System.out.println("######## Deq elements ########");
+        // for (int i : deq) {
+        //     System.out.println(i); 
+        // }
+        // deq.removeLast();
+        // System.out.println("Deq size: " + deq.size());
+        // System.out.println("");
+        // System.out.println("######## Deq elements ########");
+        // for (int i : deq) {
+        //     System.out.println(i); 
+        // }
+        // System.out.println("");
+        // System.out.println("");
+        // System.out.println("");
+        // deq.removeLast();
+        // System.out.println("Deq size: " + deq.size());
+        // System.out.println("");
+        // System.out.println("######## Deq elements ########");
+        // for (int i : deq) {
+        //     System.out.println(i); 
+        // }
+        // System.out.println("");
+        // System.out.println("");
+        // System.out.println("");
+        // deq.removeFirst();
+        // System.out.println("Deq size: " + deq.size());
+        // System.out.println("");
+        // System.out.println("######## Deq elements ########");
+        // for (int i : deq) {
+        //     System.out.println(i); 
+        // }
     }
 
 }
