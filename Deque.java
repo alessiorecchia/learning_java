@@ -77,7 +77,7 @@ public class Deque<Item> implements Iterable<Item> {
         last = last.prev;
         last.next = null;
         n--;
-        if (isEmpty()) first=null;
+        if (isEmpty()) first = null;
         return item;
     }
 
@@ -128,6 +128,8 @@ public class Deque<Item> implements Iterable<Item> {
             System.out.println(i); 
         }
         System.out.println("");
+        System.out.println("");
+        System.out.println("");
         deq.removeFirst();
         deq.removeLast();
 
@@ -139,6 +141,8 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         System.out.println("");
+        System.out.println("");
+        System.out.println("");
         deq.removeLast();
         System.out.println("Deq size: " + deq.size());
         System.out.println("");
@@ -153,6 +157,9 @@ public class Deque<Item> implements Iterable<Item> {
         for (int i : deq) {
             System.out.println(i); 
         }
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
         deq.removeLast();
         System.out.println("Deq size: " + deq.size());
         System.out.println("");
@@ -160,7 +167,10 @@ public class Deque<Item> implements Iterable<Item> {
         for (int i : deq) {
             System.out.println(i); 
         }
-        deq.removeLast();
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+        deq.removeFirst();
         System.out.println("Deq size: " + deq.size());
         System.out.println("");
         System.out.println("######## Deq elements ########");
